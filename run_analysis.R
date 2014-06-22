@@ -19,6 +19,7 @@
 run_analysis <- function(writeFirstDataSet = FALSE, writeSecondDataSet = TRUE, formatWide = TRUE) {
   # load required libraries
   library(data.table)
+  library(reshape2)
   
   # read in the files
   # general data files
@@ -77,6 +78,8 @@ run_analysis <- function(writeFirstDataSet = FALSE, writeSecondDataSet = TRUE, f
   
   data2 <- data.frame()
   
+  # create the second data set with an average of each feature broken out by
+  # subjectID and activity.
   for (subj in sort(unique(data$subjectID))) {
     for (act in activityLabels$V2) {
       for (i in 1:(ncol(data)-2)) {
@@ -89,7 +92,7 @@ run_analysis <- function(writeFirstDataSet = FALSE, writeSecondDataSet = TRUE, f
   
   # for thsoe who think wide data is "tidier"
   if(formatWide){
-    data2 <- dcast(data2, subjectID + dataFeature ~ Activity, value.var="Average")
+    data2 <- dcast(data2, SubjectID + DataFeature ~ Activity, value.var="Average")
   }
   
   # write dataset to file (if so desired)
